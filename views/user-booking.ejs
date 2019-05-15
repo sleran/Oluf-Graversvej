@@ -1,0 +1,91 @@
+<% include partials/head.ejs %>
+<% include partials/header.ejs %>
+<% include partials/navigation.ejs %>
+<main tabindex="0" role="main" class="main" id="maincontent">
+	<section class="bookConfRoom">
+		<h2 class="bookTimeConfH2">Vælg Tidspunkt for din ønsket booking</h2>
+		<div class="bookTimeConfTable">
+		<table>
+			<thead>
+				<tr>
+					<th>Tidspunkt</th>
+					<th>Status</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% slots.forEach(slot => { %>
+
+				<% if(slot.reservation){ %>
+					<tr class="timeNone" data-slotId="<%= slot.id %>">
+						<td><%= slot.starts %> - <%= slot.ends %></td>
+						<td class="timeStatus">Optaget</td>
+					</tr>
+				<% } else { %>
+				<tr class="timeSlot" data-slotId="<%= slot.id %>">
+					<td><%= slot.starts %> - <%= slot.ends %></td>
+					<td class="timeStatus"></td>
+				</tr>
+				<% } %>
+
+				<% }); %>
+			</tbody>
+		</table>
+		</div>
+		<a href="" class="btn-front bookTimeButton">Book tid</a>
+	</section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/da.js"></script>
+<link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/confetti.css">
+
+<script>
+flatpickr.l10ns.default.firstDayOfWeek = 1;
+flatpickr(".datePick", {
+    "locale": "da",
+    time_24hr: true
+});
+</script>
+
+<script>
+	const timeSlots = document.querySelectorAll('.timeSlot');
+
+	timeSlots.forEach(timeSlot => {
+		timeSlot.addEventListener('click', () => {
+			timeSlot.classList.toggle('choosenTime');
+		})
+	})
+</script>
+
+<script>
+const book = document.querySelector('.bookTimeButton');
+
+book.addEventListener('click', (e) => {
+	e.preventDefault();
+
+	const slot = document.querySelector('.choosenTime');
+	const slotData = slot.dataset.slotid;
+	const date = window.location.href.split('/').pop();
+
+	const data = {
+				'slot_fk': slotData,
+				'date': date
+			};
+	fetch('/booking', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(data)
+	})
+	.then(response => {
+			if (response.status === 200) {
+				window.location.reload();
+			} else {
+				console.log('Noget gik galt');
+			}
+		})
+})
+</script>
+<% include partials/footer.ejs %>
+<% include partials/after-footer.ejs %>

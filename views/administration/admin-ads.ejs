@@ -1,0 +1,77 @@
+<% include ../partials/head.ejs %>
+<% include ./partials/admin-header.ejs %>
+<% include ./partials/admin-primaryNavigation.ejs %>
+<main role="main" class="adminPage">
+	<section>
+        <h1><%= title %></h1>
+        <h2>Rediger annoncer</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Redigér</th>
+                    <th>Navn</th>
+                    <th>Personer</th>
+                    <th>Pris</th>
+                    <th>Slet</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% ads.forEach(adv => { %> 
+                <tr>
+                    <td><a href="/admin/rediger-annonce/<%= adv.id %>"><i class="fas fa-edit"></i></a></td>
+                    <td><%= adv.name %></td>
+                    <td><%= adv.persons %></td>
+                    <td><%= adv.price %></td>
+                    <td><i data-id="<%= adv.id %>" data-category="annoncer" class="fas fa-trash-alt"></i></td>
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
+
+        <h2>Opret ny annonce</h2>
+        <form action="" method="POST" id="addNewProduct" enctype="multipart/form-data" class="postForm">
+            <label>Billede</label>
+            <input name="image" type="file" id="picture">
+            
+            <label>Navn</label>
+            <input name="name" id="title" input="text">
+            
+            <label>Personer</label>
+            <textarea name="persons" id="content"></textarea>
+
+            <label>Pris </label>
+            <input name="price" id="pricetag">
+
+            <p class="errorMessage"></p>
+            <button type="submit">Gem annonce</button>
+        </form>
+	</section>
+</main>
+<script src="/scripts/dynamicSelect.js" ></script>
+<script src="/scripts/validator.js"></script>
+<script>
+    // New products validation
+    jsb.validationEmpty('#addNewProduct', '.ddList', 'Vælg kategori!', '.errorMessage');
+    jsb.validationEmpty('#addNewProduct', '#pricetag', 'Skriv pris!', '.errorMessage');
+    jsb.validationEmpty('#addNewProduct', '#content', 'Skriv indhold!', '.errorMessage');
+    jsb.validationEmpty('#addNewProduct', '#title', 'Udfyld titlen!', '.errorMessage');
+    jsb.validationEmpty('#addNewProduct', '#picture', 'Vælg et billede!', '.errorMessage');
+</script>
+<script>
+const deleteButtons = document.querySelectorAll('.fa-trash-alt');
+deleteButtons.forEach(btn => {
+    btn.addEventListener('click', event => {
+        const id = event.target.dataset.id;
+        const category = event.target.dataset.category;
+        fetch(`/admin/${category}/${id}`, {
+            'method': 'DELETE'
+        })
+        .then(response => {
+            if (response.status === 200) {
+                window.location.reload();
+            }
+        });
+    })
+})
+</script>
+<% include ../partials/after-footer.ejs %>
