@@ -1,0 +1,187 @@
+#jumpToContent {
+    left:-999px;
+    position:absolute;
+    top:auto;
+    width:1px;
+    height:1px;
+    overflow:hidden;
+    z-index:-999;
+}
+#jumpToContent:focus, #jumpToContent:active {
+    color: #000000;
+    background-color:#fff;
+    left: auto;
+    top: auto;
+    width: 30%;
+    height: auto;
+    overflow:auto;
+    margin: 10px 35%;
+    padding:5px;
+    border-radius: 15px;
+    text-align:center;
+    font-size:1.2em;
+    z-index:999;
+}
+
+#mySidenav li a {
+    display: inline-block;
+    padding: 1em 4vw;
+    background-color: blue;
+    color: white;
+    text-decoration: none;
+    text-shadow: #000000 2px 2px;
+    border-radius: 15px 0px 0px 0px;
+    -webkit-border-radius: 15px 0px 0px 0px;
+    -moz-border-radius: 15px 0px 0px 0px;
+    -ms-border-radius: 15px 0px 0px 0px;
+    -o-border-radius: 15px 0px 0px 0px;
+    box-shadow: #fff 2px 2px;
+}
+#mySidenav li a:hover {
+    background-color: white;
+    color: blue;
+    text-shadow: #fff 2px 2px;
+    box-shadow: blue 2px 2px;
+}
+.errorMessageShow {
+    max-width: 400px;
+    background-color: red;
+    color: #fff;
+    border-radius: 15px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    -ms-border-radius: 15px;
+    -o-border-radius: 15px;
+    padding: 0.5em 2em;
+}
+.errorInput {
+    border: red solid 2px;
+}
+.successMessageShow {
+    max-width: 400px;
+    background-color: greenyellow;
+    color: #fff;
+    border-radius: 15px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    -ms-border-radius: 15px;
+    -o-border-radius: 15px;
+    padding: 0.5em 2em;
+}
+.successInput {
+    border: greenyellow solid 2px;
+}
+img {
+    width: 15em;
+    height: auto;
+}
+.fa-trash-alt {
+    cursor: pointer;
+    color: red;
+}
+
+.fa-edit {
+    cursor: pointer;
+    color: black;
+}
+
+.choosenTime {
+    background-color: #000000;
+    color: #fff;
+}
+
+.btn {
+    margin-top: 0.4em;
+    padding: 0.5em 2em;
+    width: 10em;
+    max-height: 4em;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    background-color: greenyellow;
+}
+
+.btn-front {
+    margin: 0.4em;
+    padding: 0.5em 2em;
+    width: 10em;
+    max-height: 4em;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    background-color: blue;
+    color: #fff;
+    text-decoration: none;
+    box-shadow: #000000 2px 2px;
+}
+.btn-front:hover {
+    background-color:white;
+    color: blue;
+    box-shadow: #000000 2px 2px;
+}
+
+.imageFront img{
+    width: 25vw;
+    min-width: 250px;
+    height: auto;
+}
+
+.frontSection p,
+.frontSection li {
+    font-size: 1.6em;
+}
+
+.frontSection h2 {
+    font-size: 2.2em;
+    background-color: #000000;
+    color: #fff;
+}
+
+.topText {
+    font-size: 4vw;
+    text-decoration: none;
+    color: #fff;
+    text-shadow: #000000 2px 2px;
+}
+
+.timeNone {
+    background-color: red;
+}
+
+.bookTimeConfTable table, .bookTimeConfTable th, .bookTimeConfTable td,
+.userBookings table, .userBookings th, .userBookings td {
+    border-collapse: collapse;
+    border: 2px solid black;
+    padding: 0.2em;
+    cursor: pointer;
+    width: 100%;
+}
+.bookTimeConfTable::-webkit-scrollbar {
+    width: 12px;
+}
+
+.bookTimeConfTable::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 10px;
+}
+
+.bookTimeConfTable::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+
+.bookTimeButton {
+    grid-column: 2/span 1;
+    grid-row: 3/span 1;
+}
+.datePickFront,
+.inputFrontend {
+    border: #000000 1px solid;
+    margin-bottom: 0.2em;
+}

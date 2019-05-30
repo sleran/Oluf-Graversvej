@@ -1,0 +1,78 @@
+<% include ../partials/head.ejs %>
+<% include ./partials/admin-header.ejs %>
+<% include ./partials/admin-primaryNavigation.ejs %>
+<main role="main" class="adminPage">
+	<section>
+        <h1><%= title %></h1>
+        <h2>Rediger kategorier</h2>
+
+        <% categories.forEach(category => { %> 
+        <form id="categoryItem" class="userItem" action="/admin/kategorier">
+                <i data-id="<%= category.id %>" data-category="kategorier" class="fas fa-trash-alt"></i>
+                <input type="hidden" name="id" value="<%= category.id %>">
+                <label>Navn</label>
+                <input id="nameInput" name="name" input="text" value="<%= category.name %>">
+                <button type="submit">Opdater kategori</button>
+        </form>
+        <% }); %>
+
+        <h2>Opret ny Kategori</h2>
+        <form id="addCategoryItem" action="" method="POST">
+            <p class="errorMessage"></p>
+            <label>Navn</label>
+            <input id="addNameInput" name="name" input="text">
+            <button type="submit">Gem kategori</button>
+        </form>
+	</section>
+</main>
+<script src="/scripts/validator.js"></script>
+<script>
+    // New category validation
+    jsb.validationEmpty('#addCategoryItem', '#addNameInput', 'Udfyld et navn!', '.errorMessage');
+</script>
+<script>
+    const menuArray = document.querySelectorAll('.userItem');
+    
+    menuArray.forEach(file => {
+    
+    file.addEventListener('submit', function (event) {
+        event.preventDefault();
+        const data = {
+                    'id': this.id.value,
+                    'name': this.name.value
+                };
+        fetch('/admin/kategorier', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+                if (response.status === 204) {
+                    window.location.reload(true);
+                } else {
+                    console.log('Noget gik galt');
+                }
+            })
+    });
+    });
+</script>
+<script>
+const deleteButtons = document.querySelectorAll('.fa-trash-alt');
+deleteButtons.forEach(btn => {
+    btn.addEventListener('click', event => {
+        const id = event.target.dataset.id;
+        const category = event.target.dataset.category;
+        fetch(`/admin/${category}/${id}`, {
+            'method': 'DELETE'
+        })
+        .then(response => {
+            if (response.status === 200) {
+                window.location.reload();
+            }
+        });
+    })
+})
+</script>
+<% include ../partials/after-footer.ejs %>

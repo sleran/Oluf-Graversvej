@@ -1,0 +1,70 @@
+<% include partials/head.ejs %>
+<% include partials/header.ejs %>
+<% include partials/navigation.ejs %>
+<main tabindex="0" role="main" class="main" id="maincontent">
+	<div class="userBookings">
+		<section class="bookConfRoomDate">
+			<h2>Vælg dato for din ønsket booking</h2>
+			<form class="chooseDateForm" action="" method="post">
+				<input type="text" class="datePick datePickFront" name="date" placeholder="Vælg dato"> 
+				<button class="btn-front" type="submit">Videre</button>
+			</form>
+		</section>
+		<section>
+			<h2>Dine Nuværende reservationer</h2>
+			<table>
+				<thead>
+					<tr>
+						<th>Dato</th>
+						<th>Start</th>
+						<th>Slut</th>
+						<th>Slet</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% reservations.forEach(reservation => { %>
+					<tr>
+						<td><%= moment(reservation.date).format('LL') %></td>
+						<td><%= reservation.starts %></td>
+						<td><%= reservation.ends %></td>
+						<td><i data-id="<%= reservation.id %>" data-category="reservation" class="fas fa-trash-alt"></i></td>
+					</tr>
+					<% }); %>
+				</tbody>
+			</table>
+		</section>
+	</div>
+</main>
+<script>
+	const deleteButtons = document.querySelectorAll('.fa-trash-alt');
+	deleteButtons.forEach(btn => {
+		btn.addEventListener('click', event => {
+			const id = event.target.dataset.id;
+			const category = event.target.dataset.category;
+			fetch(`/booking-tid/${category}/${id}`, {
+				'method': 'DELETE'
+			})
+			.then(response => {
+				if (response.status === 200) {
+					window.location.reload();
+				}
+			});
+		})
+	})
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/da.js"></script>
+<link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/material_blue.css">
+<script>
+flatpickr.l10ns.default.firstDayOfWeek = 1;
+flatpickr(".datePick", {
+    "locale": "da",
+    time_24hr: true
+});
+</script>
+
+
+
+<% include partials/footer.ejs %>
+<% include partials/after-footer.ejs %>

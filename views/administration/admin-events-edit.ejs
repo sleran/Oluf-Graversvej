@@ -1,0 +1,109 @@
+<% include ../partials/head.ejs %>
+<% include ./partials/admin-header.ejs %>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<% include ./partials/admin-primaryNavigation.ejs %>
+<main role="main" class="adminPage">
+	<section>
+        <h1><%= title %></h1>
+        <h2>Rediger mødelokale</h2>
+        <form class="articleItem editForm" action="/admin/events">
+            <input type="hidden" name="id" value="<%= event.id %>">
+            <label><img src="../../media/<%= event.image %>" alt="" class="profileImage"></label>
+            <input type="file" class="profileFileSelect" data-imageid="<%= event.id %>">
+
+            <label>Navn</label>
+            <input name="name" input="text" value="<%= event.name %>" >
+
+            <label>Åbner</label>
+            <input name="starts" id="opens" class="datePick" type="text" placeholder="mødelokalet åbner.." value="<%= event.opens %>">
+
+            <label>Lukker</label>
+            <input name="closes" id="end" class="datePick" type="text" placeholder="mødelokalet lukker.." value="<%= event.closes %>">
+
+            <label>Interval</label>
+            <input name="interval" id="pricetag" input="text" class="minutePick" value="<%= event.interval %>">
+
+            
+            <button type="submit">Opdater</button>
+        </form>
+    </section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/da.js"></script>
+<link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/confetti.css">
+<script>
+flatpickr.l10ns.default.firstDayOfWeek = 1;
+flatpickr(".datePick", {
+    enableTime: true,
+    dateFormat: "Y-m-d H:i",
+    minDate: "today",
+    "locale": "da",
+    time_24hr: true
+});
+flatpickr.l10ns.default.firstDayOfWeek = 1;
+flatpickr(".minutePick", {
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "00:i:00",
+    "locale": "da",
+    time_24hr: true
+});
+</script>
+    <script src="/scripts/dynamicSelect.js" ></script>
+    <script>
+    const menuArray = document.querySelectorAll('.articleItem');
+    
+    menuArray.forEach(file => {
+    
+    file.addEventListener('submit', function (event) {
+        event.preventDefault();
+        const data = {
+                    'id': this.id.value,
+                    'name': this.name.value,
+                    'opens': this.opens.value,
+                    'closes': this.closes.value,
+                    'interval': this.interval.value
+                };
+        fetch('/admin/conferenceroom', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+                if (response.status === 204) {
+                    window.location.reload(true);
+                } else {
+                    console.log('Noget gik galt');
+                }
+            })
+    });
+    });
+    </script>
+    <script>
+    const files = document.querySelectorAll('.profileFileSelect');
+    files.forEach(file => {
+    file.addEventListener('change', function (event) {
+        const article = event.target.dataset.imageid;
+        const formData = new FormData();
+        formData.append('photo', this.files[0]);
+        fetch(`/admin/article/image/${article}`, {
+            method: 'PATCH',
+            body: formData
+        })
+            .then(response => {
+                if (response.status === 200) { 
+                    return response.json();
+                    window.location.reload(true);
+                }
+            })
+            .then(data => {
+                const img = document.querySelector('.profileImage');
+                img.src = `../../media/${data.photo}`;
+                window.location.reload(true);
+            });
+    });
+    });
+    </script>
+    <% include ../partials/after-footer.ejs %>

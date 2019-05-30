@@ -1,0 +1,100 @@
+<% include ../partials/head.ejs %>
+<% include ./partials/admin-header.ejs %>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<% include ./partials/admin-primaryNavigation.ejs %>
+<main role="main" class="adminPage">
+	<section>
+        <h1><%= title %></h1>
+        <h2>Rediger Mødelokaler</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Redigér</th>
+                        <th>Navn</th>
+                        <th>Åbner</th>
+                        <th>Lukker</th>
+                        <th>Interval</th>
+                        <th>Slet</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% events.forEach(event => { %> 
+                    <tr>
+                        <td><a href="/admin/rediger-event/<%= event.id %>"><i class="fas fa-edit"></i></a></td>
+                        <td><%= event.name %></td>
+                        <td><%= momento(event.opens, "hh:mm:ss").format('LT'); %></td>
+                        <td><%= momento(event.closes, "hh:mm:ss").format('LT'); %></td>
+                        <td><%= event.interval %></td>
+                        <td><i data-id="<%= event.id %>" data-category="conferencerooms" class="fas fa-trash-alt"></i></td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        
+
+     
+
+        <h2>Opret nyt Mødelokale</h2>
+        <form action="" method="POST" id="addNewArticle" enctype="multipart/form-data" class="postForm">
+            <label>Billede</label>
+            <input name="image" id="picture" type="file">
+            
+            <label>Navn</label>
+            <input name="name" id="title" input="text">
+
+            <label>Åbner</label>
+            <input name="opens" id="start" class="datePick" type="text" placeholder="mødelokalet åbner..">
+
+            <label>Lukker</label>
+            <input name="closes" id="end" class="datePick" type="text" placeholder="mødelokalet lukker..">
+
+            <label>Interval</label>
+            <input name="interval" id="pricetag" class="minutePick" input="number">
+                       
+            <p class="errorMessage"></p>
+            <button type="submit">Gem mødelokale</button>
+        </form>
+	</section>
+</main>
+<script src="/scripts/dynamicSelect.js" ></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/da.js"></script>
+<link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/confetti.css">
+
+<script>
+flatpickr.l10ns.default.firstDayOfWeek = 1;
+flatpickr(".datePick", {
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "H:i",
+    "locale": "da",
+    time_24hr: true
+});
+
+flatpickr.l10ns.default.firstDayOfWeek = 1;
+flatpickr(".minutePick", {
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "00:i:00",
+    "locale": "da",
+    time_24hr: true
+});
+</script>
+<script>
+const deleteButtons = document.querySelectorAll('.fa-trash-alt');
+deleteButtons.forEach(btn => {
+    btn.addEventListener('click', event => {
+        const id = event.target.dataset.id;
+        const category = event.target.dataset.category;
+        fetch(`/admin/${category}/${id}`, {
+            'method': 'DELETE'
+        })
+        .then(response => {
+            if (response.status === 200) {
+                window.location.reload();
+            }
+        });
+    })
+})
+</script>
+<% include ../partials/after-footer.ejs %>

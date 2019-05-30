@@ -1,0 +1,91 @@
+<% include ../partials/head.ejs %>
+<% include ./partials/admin-header.ejs %>
+<% include ./partials/admin-primaryNavigation.ejs %>
+<main role="main" class="adminPage">
+	<section>
+        <h1><%= title %></h1>
+        <h2>Rediger brugere</h2>
+
+        <% users.forEach(user => { %> 
+        <form class="userItem " action="/admin/brugere">
+                <i data-id="<%= user.id %>" data-category="brugere" class="fas fa-trash-alt"></i>
+                <input type="hidden" name="id" value="<%= user.id %>">
+                <label>Bruger-navn</label>
+                <input name="name" input="text" value="<%= user.user_name %>">
+                <label>Password</label>
+                <input name="pass" input="text" type="password" value="<%= user.pass %>" disabled>
+                <label>Brugerrolle</label>
+                <div name="roles" class="roleUpdate" data-cat="<%= user.fk_role %>"></div>
+                
+                <button type="submit">Opdater</button>
+        </form>
+        <% }); %>
+
+        <h2>Opret ny bruger</h2>
+        <form class="userItemAdd" id="addUser" action="" method="POST">
+            <label>Bruger-navn</label>
+            <input name="name" id="username" input="text">
+            <label>Password</label>
+            <input name="pass" id="password" input="text" type="password">
+            <label>Brugerrolle</label>
+            <div name="roles" class="roleUpdate"></div>
+            <p class="errorMessage"></p>
+            <button type="submit">Gem bruger</button>
+        </form>
+	</section>
+</main>
+<script src="/scripts/dynamicSelect.js" ></script>
+<script src="/scripts/validator.js"></script>
+<script>
+    // New user validation
+    jsb.validationEmpty('#addUser', '.ddList', 'Vælg brugerrolle!', '.errorMessage');
+    jsb.validationEmpty('#addUser', '#password', 'Udfyld et password!', '.errorMessage');
+    jsb.validationEmpty('#addUser', '#username', 'Udfyld et brugernavn!', '.errorMessage');
+</script>
+<script>
+        const menuArray = document.querySelectorAll('.userItem');
+        
+        menuArray.forEach(file => {
+        
+        file.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const data = {
+                        'id': this.id.value,
+                        'name': this.name.value,
+                        'role': this.roleUpdate.value
+                    };
+            fetch('/admin/brugere', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                    if (response.status === 204) {
+                        window.location.reload(true);
+                    } else {
+                        console.log('Noget gik galt');
+                    }
+                })
+        });
+        });
+        </script>
+<script>
+const deleteButtons = document.querySelectorAll('.fa-trash-alt');
+deleteButtons.forEach(btn => {
+    btn.addEventListener('click', event => {
+        const id = event.target.dataset.id;
+        const category = event.target.dataset.category;
+        fetch(`/admin/${category}/${id}`, {
+            'method': 'DELETE'
+        })
+        .then(response => {
+            if (response.status === 200) {
+                window.location.reload();
+            }
+        });
+    })
+})
+</script>
+<% include ../partials/after-footer.ejs %>

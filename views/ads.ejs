@@ -1,0 +1,19 @@
+<% include partials/head.ejs %>
+<% include partials/header.ejs %>
+<% include partials/navigation.ejs %>
+<main tabindex="0" role="main" class="main" id="maincontent">
+	<section class="adslist">
+	<% ads.forEach(adv => { %> 
+		<article class="adverts">
+			<h2><%= adv.name %></h2>
+			<img src="./media/<%= adv.image %>" alt="">
+			<p>Antal personer: <%= adv.persons %></p>
+			<p>Pris pr. måned: <%= adv.price %></p>
+			<a href="tel:+4561709617" class="btn-front">Ring op</a>
+			<a href="mailto:someone@example.com?Subject=Ang%20leje%20af%20<%= adv.name %>" class="btn-front">Email</a>
+		</article>
+	<% }); %>
+	</section>
+</main>
+<% include partials/footer.ejs %>
+<% include partials/after-footer.ejs %>
