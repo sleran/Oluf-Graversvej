@@ -70,10 +70,8 @@ button {
     flex-direction: column;
     margin: 2em 0;
 }
-.intro, .features {
-    height: 20vw;
-    min-height: 300px;
-    margin: 2em 0;
+.intro {
+    min-height: 20vw;
     text-align: center;
 }
 .featuresList{

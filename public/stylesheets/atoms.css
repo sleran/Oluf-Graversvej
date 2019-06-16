@@ -26,7 +26,7 @@
 #mySidenav li a {
     display: inline-block;
     padding: 1em 4vw;
-    background-color: blue;
+    background-color: rgb(88, 124, 233);
     color: white;
     text-decoration: none;
     text-shadow: #000000 2px 2px;
@@ -39,9 +39,9 @@
 }
 #mySidenav li a:hover {
     background-color: white;
-    color: blue;
+    color: rgb(88, 124, 233);
     text-shadow: #fff 2px 2px;
-    box-shadow: blue 2px 2px;
+    box-shadow: rgb(88, 124, 233) 2px 2px;
 }
 .errorMessageShow {
     max-width: 400px;
@@ -67,6 +67,7 @@
     -ms-border-radius: 15px;
     -o-border-radius: 15px;
     padding: 0.5em 2em;
+    margin-top: 1em;
 }
 .successInput {
     border: greenyellow solid 2px;
@@ -113,14 +114,14 @@ img {
     -moz-border-radius: 10px;
     -ms-border-radius: 10px;
     -o-border-radius: 10px;
-    background-color: blue;
+    background-color: rgb(88, 124, 233);
     color: #fff;
     text-decoration: none;
     box-shadow: #000000 2px 2px;
 }
 .btn-front:hover {
     background-color:white;
-    color: blue;
+    color: rgb(88, 124, 233);
     box-shadow: #000000 2px 2px;
 }
 
@@ -177,6 +178,7 @@ img {
 }
 
 .bookTimeButton {
+    margin-bottom: 1em;
     grid-column: 2/span 1;
     grid-row: 3/span 1;
 }

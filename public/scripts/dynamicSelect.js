@@ -34,7 +34,7 @@ const buildCategoryList = function (data, entity, id) {
 };
 
 const getList = function (type,entity) {
-	fetch(`http://localhost:1337/api/${type}`)
+	fetch(`/api/${type}`)
       .then(response => response.json())
       .then(data => { 
         document.querySelectorAll( '.' + entity).forEach(element => {

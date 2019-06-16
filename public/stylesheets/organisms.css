@@ -6,7 +6,7 @@
     text-align: center;
     width: 29vw;
     border: #000 1px solid;
-    box-shadow: blue 2px 2px;
+    box-shadow: rgb(88, 124, 233) 2px 2px;
     margin: 0.5em;
 }
 .adverts h2 {
@@ -61,7 +61,8 @@
 }
 .loginMain {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
+    align-items: center;
 }
 .loginPage {
     display: flex;

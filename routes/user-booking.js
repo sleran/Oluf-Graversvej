@@ -26,7 +26,9 @@ module.exports = function (app) {
     app.get('/booking/:date',[roleCheck.users, roleCheck.admins, roleCheck.superadmins, roleCheck.authors], (req, res, next) => {
         db.query(`SELECT * FROM slots`, (err, slots) => {
             if (err) return next(`${err} at db.query (${__filename}:7:9)`);
-            db.query(`SELECT * FROM reservations WHERE date = ?`, [req.params.date], (err, reservations) => {
+            db.query(`SELECT reservations.id, slots.starts AS starts, slots.ends AS ends, reservations.date, reservations.slot_fk FROM reservations 
+            INNER JOIN slots ON reservations.slot_fk = slots.id
+            WHERE date = ? AND user_fk = ?`, [req.params.date, req.session.user], (err, reservations) => {
                 if (err) return next(`${err} at db.query (${__filename}:7:9)`);
 
                 slots.forEach(slot => {
@@ -36,7 +38,8 @@ module.exports = function (app) {
                         }
                     });
                 });
-                res.render('user-booking', { 'slots': slots });
+                console.log(slots)
+                res.render('user-booking', { 'slots': slots, 'reservations': reservations, 'moment': moment });
             })
         })
     });

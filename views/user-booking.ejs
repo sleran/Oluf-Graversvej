@@ -2,6 +2,7 @@
 <% include partials/header.ejs %>
 <% include partials/navigation.ejs %>
 <main tabindex="0" role="main" class="main" id="maincontent">
+	<div class="userBookings">
 	<section class="bookConfRoom">
 		<h2 class="bookTimeConfH2">Vælg Tidspunkt for din ønsket booking</h2>
 		<div class="bookTimeConfTable">
@@ -31,8 +32,35 @@
 			</tbody>
 		</table>
 		</div>
-		<a href="" class="btn-front bookTimeButton">Book tid</a>
+		<div class="confirmBooking">
+			<a href="" class="btn-front bookTimeButton">Book tid</a>
+			<p class="errorMessage"></p>
+		</div>
 	</section>
+	<section>
+			<h2>Denne dags nuværende reservationer</h2>
+			<table>
+				<thead>
+					<tr>
+						<th>Dato</th>
+						<th>Start</th>
+						<th>Slut</th>
+						<th>Slet</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% reservations.forEach(reservation => { %>
+					<tr>
+						<td><%= moment(reservation.date).format('LL') %></td>
+						<td><%= reservation.starts %></td>
+						<td><%= reservation.ends %></td>
+						<td><i data-id="<%= reservation.id %>" data-category="reservation" class="fas fa-trash-alt"></i></td>
+					</tr>
+					<% }); %>
+				</tbody>
+			</table>
+		</section>
+	</div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -64,27 +92,39 @@ book.addEventListener('click', (e) => {
 	e.preventDefault();
 
 	const slot = document.querySelector('.choosenTime');
-	const slotData = slot.dataset.slotid;
+	
 	const date = window.location.href.split('/').pop();
 
-	const data = {
-				'slot_fk': slotData,
-				'date': date
-			};
-	fetch('/booking', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(data)
-	})
-	.then(response => {
+	const errMessage = 'Vælg en tid!!';
+	const errorContainer = document.querySelector('.errorMessage');
+	
+	if(!slot) {
+		errorContainer.classList.add('errorMessageShow');
+		errorContainer.innerHTML = errMessage;
+	} else {
+		const slotData = slot.dataset.slotid;
+		errorContainer.classList.remove('errorMessageShow');
+		errorContainer.innerHTML = errMessage;
+
+		const data = {
+					'slot_fk': slotData,
+					'date': date
+				};
+		fetch('/booking', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		})
+		.then(response => {
 			if (response.status === 200) {
 				window.location.reload();
 			} else {
 				console.log('Noget gik galt');
 			}
 		})
+	}
 })
 </script>
 <% include partials/footer.ejs %>
